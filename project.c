@@ -12,9 +12,11 @@
 
 #define PORT 5000
 
+// TCP Server Connections
 bool tcpServerConnections(struct sockaddr_in server, int sockfd, char IP[])
 {
     bool situation = false;
+    
     // Socket Configurations
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
@@ -40,6 +42,7 @@ bool tcpServerConnections(struct sockaddr_in server, int sockfd, char IP[])
     return situation;
 }
 
+// UDP Server Connections
 bool udpServerConnections()
 {
     bool situation = false;
@@ -50,13 +53,10 @@ bool udpServerConnections()
     return situation;
 }
 
-int main() 
+// Display Function
+void display(struct sockaddr_in server, int sockfd, char IP[])
 {
     bool situation;
-    char IP[16] = "192.168.245.129\0";
-    int sockfd;
-    struct sockaddr_in server;
-    
     situation = tcpServerConnections(server, sockfd, IP);
     
     if(situation == false)
@@ -69,6 +69,15 @@ int main()
     {
         printf("Server is not UDP or TCP..\n");
     }
+}
+
+int main() 
+{
+    char IP[16] = "192.168.245.129\0";
+    int sockfd;
+    struct sockaddr_in server;
+    
+    display(server, sockfd, IP);
     
     return 0;
 }
