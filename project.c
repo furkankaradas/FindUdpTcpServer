@@ -10,10 +10,11 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#define PORT 5000
+#define PORT_START 4000
+#define PORT_END 6000
 
 // TCP Server Connections
-bool tcpServerConnections(struct sockaddr_in server, int sockfd, char IP[])
+bool tcpServerConnections(struct sockaddr_in server, int sockfd, char IP[], int *port)
 {
     bool situation = false;
     
@@ -26,14 +27,19 @@ bool tcpServerConnections(struct sockaddr_in server, int sockfd, char IP[])
     
     //TCP Server Configurations
     server.sin_family = AF_INET;
-    server.sin_port = htons(PORT);
     server.sin_addr.s_addr = inet_addr(IP);
     memset(&(server.sin_zero), '\0', 8);
     
-    // Check Server
-    if (connect(sockfd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == 0)
+    for(int i=PORT_START;i<=PORT_END;i++)
     {
-        situation = true;
+        server.sin_port = htons(i);
+        // Check Server
+        if (connect(sockfd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == 0)
+        {
+            situation = true;
+            *port = i;
+            break;
+        }
     }
     
     // Closed Socket
@@ -55,8 +61,9 @@ bool udpServerConnections()
 // Display Function
 void display(struct sockaddr_in server, int sockfd, char IP[])
 {
+    int port;
     bool situation;
-    situation = tcpServerConnections(server, sockfd, IP);
+    situation = tcpServerConnections(server, sockfd, IP, &port);
     
     if(situation == false)
     {
@@ -65,7 +72,7 @@ void display(struct sockaddr_in server, int sockfd, char IP[])
     }
     else 
     {
-        printf("TCP Server.\n");
+        printf("%d Port Open in TCP Server.\n", port);
         exit(1);
     }
     
