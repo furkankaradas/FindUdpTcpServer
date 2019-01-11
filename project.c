@@ -33,7 +33,6 @@ bool tcpServerConnections(struct sockaddr_in server, int sockfd, char IP[])
     // Check Server
     if (connect(sockfd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == 0)
     {
-        printf("TCP Server.\n");
         situation = true;
     }
     
@@ -64,10 +63,20 @@ void display(struct sockaddr_in server, int sockfd, char IP[])
         printf("Server is not TCP server.\nTrying UDP Server...\n");
         situation = udpServerConnections();
     }
+    else 
+    {
+        printf("TCP Server.\n");
+        exit(1);
+    }
     
     if(situation == false)
     {
-        printf("Server is not UDP or TCP..\n");
+        printf("Server is not UDP server.\n");
+    }
+    else
+    {
+        printf("UDP Server.\n");
+        exit(1);
     }
 }
 

@@ -43,7 +43,7 @@ int main()
         exit(1);
     }
     
-    printf("Server listening...\n");
+    printf("Listening...\n");
     
     sin_size = sizeof(struct sockaddr_in);
     
@@ -53,7 +53,7 @@ int main()
         exit(1);
     }
     
-    printf("Message received..\n");
+    printf("Server Ended..\n");
     
     return 0;
 }
