@@ -10,8 +10,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#define PORT_START 4000
-#define PORT_END 6000
+#define PORT_START 4950
+#define PORT_END 5050
 
 // TCP Server Connections
 bool tcpServerConnections(struct sockaddr_in server, int sockfd, char IP[], int *port)
@@ -83,7 +83,19 @@ bool udpServerConnections(int *port, int server_port)
     if(result == 0)
     {
         situation = true;
-        *port = 5000;
+        *port = server_port;
+    }
+    
+    switch(result) 
+    {
+        case 1:
+            //printf("Timeout\n");
+            break;
+
+        case 0: 
+            situation = true;
+            *port = server_port;
+            break;
     }
     
     close(sock);
